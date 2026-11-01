@@ -1,2 +1,2 @@
 ansible_user: ec2-user
-ansible:password: DevOps321
+ansible_password: DevOps321
