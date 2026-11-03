@@ -12,3 +12,5 @@ shipping_db_password: RoboShop@1
 rabbitmq_host: rabbitmq.testdevops.sbs
 user_host: user.testdevops.sbs
 cart_host: cart.testdevops.sbs
+rabbitmq_user: roboshop
+rabbitmq_password: roboshop123
