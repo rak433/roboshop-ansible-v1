@@ -3,12 +3,13 @@
   connection: local
   vars:
     # ansible-playbook roboshop.yaml -e "instances=['mongodb', 'redis']"
-    instances: [ "mongodb", "redis", "mysql", "rabbitmq", "catalogue", "user", "cart", "shipping", "payment", "frontend" ]
+    # ansible-playbook roboshop.yaml -e "action=delete"
+    instances: ["mongodb", "redis", "mysql", "rabbitmq", "catalogue", "user", "cart", "shipping", "payment", "frontend"]
     action: create
     domain_name: testdevops.sbs
     ami_id: ami-0055977a6e828a4f4
   tasks:
-  - name: create ec2 instances
+  - name: create ec2 instance
     amazon.aws.ec2_instance:
       name: "roboshop-{{ item }}"
       image_id: "{{ ami_id }}"
@@ -28,8 +29,8 @@
   - name: create R53 record
     amazon.aws.route53:
       state: present
-      zone: "{{ domain_name }}" 
-      record: "{{ item.item }}.{{ domain_name }}" # mongodb.testdevops.sbs
+      zone: "{{ domain_name }}"
+      record: "{{ item.item }}.{{ domain_name }}" # mongodb.daws92s.store
       type: A
       ttl: 1
       value: "{{ item.instances[0].private_ip_address }}"
@@ -40,8 +41,8 @@
   - name: create R53 record for frontend
     amazon.aws.route53:
       state: present
-      zone: "{{ domain_name }}" 
-      record: "{{ item.item }}.{{ domain_name }}" # testdevops.sbs points to frontend public IP
+      zone: "{{ domain_name }}"
+      record: "{{ domain_name }}" # testdevops.sbs points to frontend public IP
       type: A
       ttl: 1
       value: "{{ item.instances[0].public_ip_address }}"
@@ -49,7 +50,7 @@
     loop: "{{ ec2_output.results }}"
     when: action == "create" and item.item == "frontend"
 
-  - name: delete R53 record
+  - name: delete R53 records
     amazon.aws.route53:
       state: absent
       zone: "{{ domain_name }}"
@@ -66,8 +67,7 @@
       record: "{{ domain_name }}"
       ttl: 1
       type: A
-    loop: "{{ instances }}"
-    when: action == "delete" and item.item == "frontend"
+    when: action == "delete" 
 
   - name: delete ec2 instances
     amazon.aws.ec2_instance:
