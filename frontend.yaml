@@ -24,12 +24,33 @@
       file_type: any
     register: directory_contents
 
-  - name: print directorey content
+  - name: print directory content
     debug:
-      msg: "{{ directorey_contents }}"
+      msg: "{{ directory_contents }}"
 
   - name: delete the discovered countDocuments
     ansible.builtin.file:
       path: "{{ item.path }}"
       state: absent
     loop: "{{ directory_contents.files }}"
+
+  - name: download frontend application
+    get_url:
+      url: https://raw.githubusercontent.com/daws-92s/roboshop-documentation/refs/heads/main/artifacts/frontend-v4.zip
+      dest: /tmp/frontend.zip
+
+  - name: unzip frontend
+    unarchive:
+      src: /tmp/frontend.zip
+      dest: /usr/share/nginx/html
+      remote_src: yes
+
+  - name: copy roboshop configure
+    template:
+      src: roboshop.conf.j2
+      dest: /etc/nginx/default.d/roboshop.conf
+  
+  - name: restart nginx
+    service:
+      name: nginx
+      state: restarted
