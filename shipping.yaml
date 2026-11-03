@@ -78,5 +78,3 @@
     command: mvn clean package
     args:
       chdir: /app
-
-  - name: 
