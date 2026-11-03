@@ -3,7 +3,7 @@
   connection: local
   vars:
     # ansible-playbook roboshop.yaml -e "instances=['mongodb', 'redis']"
-    instances: [ "mongodb", "redis", "mysql", "rabbitmq" ]
+    instances: [ "mongodb", "redis", "mysql", "rabbitmq", "catalogue", "user", "cart", "shipping", "payment" ]
     action: create
     domain_name: testdevops.sbs
     ami_id: ami-0055977a6e828a4f4
