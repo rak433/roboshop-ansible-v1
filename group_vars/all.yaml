@@ -6,3 +6,4 @@ redis_host: redis.testdevops.sbs
 catalogue_host: catalogue.testdevops.sbs
 shipping_host: shipping.testdevops.sbs
 payment_host: payment.testdevops.sbs
+mysql_root_password: RoboShop@1

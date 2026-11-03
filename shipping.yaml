@@ -11,6 +11,7 @@
       - maven
       - java-25-openjdk-devel
       - maven-openjdk25 # installing this so that we no need to set JAVA_HOME again
+      - mysql
       state: present
 
   # - name: find java 25 path
@@ -78,3 +79,16 @@
     command: mvn clean package
     args:
       chdir: /app
+
+  - name: moving shipping jar file
+    command: mv target/shipping.jar shipping.jar
+    args:
+      chdir: /app
+
+  - name: check cities data exist or not
+    command: mysql -h "{{ mysql_host }}" -u root -p{{ mysql_root_password}} -N -B -e "SELECT COUNT(*) FROM cities.cities;"
+    register: cities_count
+
+  - name: print cities count
+    debug:
+      msg: "{{ cities_count }}"
