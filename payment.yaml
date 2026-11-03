@@ -43,7 +43,7 @@
       dest: /app
       remote_src: yes
 
-  - name: install dependencies in vitual environment
+  - name: install dependencies in virtual environment
     ansible.builtin.pip:
     requirements: /app/requirements.txt
     virtualenv: /app/.venv
